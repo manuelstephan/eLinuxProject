@@ -48,7 +48,7 @@ and this magic number is the thing to look for when implementing a parser!
 
 using namespace std;
 
-
+// construct the parser 
 Parser::Parser()
 {
 	strcpy(this->buf,"0000");
@@ -62,14 +62,6 @@ Parser::Parser()
 	this->f_out.open("/tmp/myfifo1", ios::out);// open file handle, direction out, writing to fifo1 where wireshark is going to read	
 	 	
 }
-
-
-Parser::~Parser()
-{
-	this->f_in.close();
-	this->f_out.close();
-}
-
 
 void Parser::shift()
 {

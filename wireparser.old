@@ -1,9 +1,8 @@
 /************************************************************************************************
-@@File: wireparser.cpp
 @@Author: Manuel Stephan and Ben Paras 
 @@Class: eLinux 
-@@Project: Wireshark Parser 
-@@Version: Basic Object Oriented, working stable. 
+@@Project: Wireshark parser 
+@@Version: Basic Object Oriented, working correctly!!! 
 
 Complete: 
 *********
@@ -11,11 +10,10 @@ Complete:
 - general parsing engine working in basic forward mode. 
 - object oriented approach working.
 - modified a file and the parser filtered the wrong content. 
-- setupscript in bash provides the fifos ... 
-- 
+
 todo: 
 *****
-use ptrs
+use ptrs, setupscript in bash could be cool ... 
 
 do a class as a finfite state machine ... 
 with constructors and destructors 
@@ -42,13 +40,50 @@ typedef struct pcap_hdr_s
 } pcap_hdr_t;
 
 and this magic number is the thing to look for when implementing a parser! 
-*/
 
-#include "wireparser.hpp"
+magic_number: used to detect the file format itself and the byte ordering. The writing application writes 0xa1b2c3d4 with it's native byte ordering format into this field. The reading application will read either 0xa1b2c3d4 (identical) or 0xd4c3b2a1 (swapped). If the reading application reads the swapped 0xd4c3b2a1 value, it knows that all the following fields will have to be swapped too. For nanosecond-resolution files, the writing application writes 0xa1b23c4d, with the two nibbles of the two lower-order bytes swapped, and the reading application will read either 0xa1b23c4d (identical) or 0x4d3cb2a1 (swapped). 
+
+taken from 
+http://wiki.wireshark.org/Development/LibpcapFileFormat
+
+
+*****************************************************************************/
+
+#include <cstdlib>
+#include <iostream>
+#include <iomanip>
+#include <iostream>
+#include <fstream>
+#include <string> 
+#include <string.h> // for stringlen
 
 using namespace std;
 
 
+#define DBG // getting all the dbg messages ... and switch them off later easily
+
+
+class Parser{
+ private: 
+ char buf[4];
+ char r; // the char you currently read from a file ... 
+ char w; // the char that is going to be written to a file 
+ char magic_mask[4];
+ bool magic_number_found;
+ fstream f_in; 
+ fstream f_out;
+
+ public:
+ Parser();
+ void shift();
+ void read_char();
+ void write_char();
+ void process_data(); 
+ void check_for_magic_number();
+ 
+};
+
+// construct the parser 
 Parser::Parser()
 {
 	strcpy(this->buf,"0000");
@@ -62,14 +97,6 @@ Parser::Parser()
 	this->f_out.open("/tmp/myfifo1", ios::out);// open file handle, direction out, writing to fifo1 where wireshark is going to read	
 	 	
 }
-
-
-Parser::~Parser()
-{
-	this->f_in.close();
-	this->f_out.close();
-}
-
 
 void Parser::shift()
 {
@@ -137,4 +164,9 @@ for(int i = 0; i < 4; i++)
 }
 
 
-
+int main()
+{
+Parser p;
+p.process_data();
+return 0;
+}
