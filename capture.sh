@@ -29,9 +29,14 @@ function cleanup {
 #...........begin program ....................................
 trap cleanup INT # get a trap for the cleanup-function listen on INTerupts ! 
 
-
-if [ $1 = eth0 ] || [ $1 = usb0 ]; then
-	echo ""
+# check existance first ...  
+if [[ -z "$1" ]]; then
+	echo "Please specify a proper interface like eth0 or usb0!"
+	echo "You do this by ./capture.sh <interfacename>"
+	exit
+	
+elif [ $1 = eth0 ] || [ $1 = usb0 ]; then
+	echo "Capturing from $1"
 else
 	echo "Please specify a proper interface like eth0 or usb0!"
 	echo "You do this by ./capture.sh <interfacename>"
@@ -52,23 +57,25 @@ fi
 # The fifos are now set up and the other programs can be fired up, if old fifos exist i remove them cause they can contain crap
 if [ -f /tmp/myfifo0 ];
 then
+	rm /tmp/myfifo0
 	mkfifo /tmp/myfifo0   
 	echo "mkfifo /tmp/myfifo0 was created ... "
 else
-   	echo "/tmp/myfifo0 already exists ... "
-   	#rm /tmp/myfifo0
+  
    	mkfifo /tmp/myfifo0  
+	echo "mkfifo /tmp/myfifo0 was created ... "
 fi
 
 
 if [ -f /tmp/myfifo1 ];
 then
+	rm /tmp/myfifo1	
 	mkfifo /tmp/myfifo1   
 	echo "mkfifo /tmp/myfifo1 was created ... "
 else
-   	echo "/tmp/myfifo0 already exists ... "
-   	#rm /tmp/myfifo1
-   	mkfifo /tmp/myfifo1  
+   	
+   	mkfifo /tmp/myfifo1 
+	echo "mkfifo /tmp/myfifo1 was created ... " 
 fi
 
 
