@@ -5,7 +5,7 @@ Project description:
 ---------------------
 This repository contains all the necessary files in the project needed to monitor traffic on the beagle using tcpdump + wireshark. 
 
-See this link for setup,configuration, and user instructions information: http://www.elinux.org/ECE497_Project_WireShark
+See this link for setup,configuration, and user instructions: http://www.elinux.org/ECE497_Project_WireShark
 
 
 Files contained: 
