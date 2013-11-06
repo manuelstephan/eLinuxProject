@@ -1,8 +1,13 @@
+
+
+
+ECE497 Fall 2013 Project 
+========================
+
 Authors: Manuel Stephan and Ben Paras
- 
-=====================================
-Project description: 
----------------------
+
+Description:
+----------------------------
 This repository contains all the necessary files in the project needed to monitor traffic on the beagle using tcpdump + wireshark. 
 
 See this link for setup,configuration, and user instructions: http://www.elinux.org/ECE497_Project_WireShark
