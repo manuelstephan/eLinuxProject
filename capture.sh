@@ -47,7 +47,7 @@ fi
 
 # wireshark is prerequisite -> check if it is there
 if hash wireshark 2>/dev/null; then
-        echo "wireshark exists"
+        echo "wireshark is installed on your system."
     else
         echo "wireshark is not installed on your system but is prerequisite."
 	echo "Try sudo apt-get install wireshark"
@@ -55,11 +55,11 @@ if hash wireshark 2>/dev/null; then
 fi
 
 # The fifos are now set up and the other programs can be fired up, if old fifos exist i remove them cause they can contain crap
-if [ -f /tmp/myfifo0 ];
+if [ -e /tmp/myfifo0 ];
 then
 	rm /tmp/myfifo0
 	mkfifo /tmp/myfifo0   
-	echo "mkfifo /tmp/myfifo0 was created ... "
+	echo "mkfifo /tmp/myfifo0 was created .. "
 else
   
    	mkfifo /tmp/myfifo0  
@@ -67,11 +67,11 @@ else
 fi
 
 
-if [ -f /tmp/myfifo1 ];
+if [ -e /tmp/myfifo1 ];
 then
 	rm /tmp/myfifo1	
 	mkfifo /tmp/myfifo1   
-	echo "mkfifo /tmp/myfifo1 was created ... "
+	echo "mkfifo /tmp/myfifo1 was created .. "
 else
    	
    	mkfifo /tmp/myfifo1 
