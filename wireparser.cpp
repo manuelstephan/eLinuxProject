@@ -1,34 +1,28 @@
-/************************************************************************************************
-@@File: wireparser.cpp
-@@Author: Manuel Stephan and Ben Paras 
-@@Class: eLinux 
-@@Project: Wireshark Parser 
-@@Version: Basic Object Oriented, working stable. 
+/*************************************************************************
+File: wireparser.cpp
+Authors: Manuel Stephan and Ben Paras 
+Class: ECE497 Embedded Linux
+Project: Wireshark Parser 
+Version: 2.0
 
 Complete: 
-*********
-- fifos working generally under linux in combination with c++. 
-- general parsing engine working in basic forward mode. 
-- object oriented approach working.
-- modified a file and the parser filtered the wrong content. 
-- setupscript in bash provides the fifos ... 
+*************************************************************************
+- FIFOs working generally under linux in combination with c++ 
+- general parsing engine working in basic forward mode
+- object oriented approach working
+- modified a file and the parser filtered the wrong content
+- setupscript in bash provides the FIFOs
 - 
-todo: 
-*****
-use ptrs
+Possible Code Improvements: 
+*************************************************************************
+Use ptrs for more speed if required
 
-do a class as a finfite state machine ... 
-with constructors and destructors 
+To speed it up even more, do a foward mode and a parse mode
 
-write a destructor !!! 
+Include checking for the reverse magic number!
 
-forward mode 
-parse mode 
-
-also check the reverse magic number!
-
-information:
-************
+Information:
+*************************************************************************
 The pcap-format looks like this: 
 
 typedef struct pcap_hdr_s 
@@ -38,28 +32,34 @@ typedef struct pcap_hdr_s
         gint32  thiszone;       * GMT to local correction *
         guint32 sigfigs;        * accuracy of timestamps *
         guint32 snaplen;        * max length of captured packets, in octets *
-        guint32 network;        data link type 
+        guint32 network;        *data link type * 
 } pcap_hdr_t;
 
-and this magic number is the thing to look for when implementing a parser! 
-*/
+And this magic number is the thing to look for when implementing a parser! 
+*************************************************************************/
+
+/*************************************************************************
+Main
+*************************************************************************/
 
 #include "wireparser.hpp"
 
 using namespace std;
 
-
 Parser::Parser()
 {
 	strcpy(this->buf,"0000");
-	this->magic_mask[0] = 0xD4; // this is LSB !!! 
+
+	this->magic_mask[0] = 0xD4; 			// this is LSB !!! 
 	this->magic_mask[1] = 0xC3;
 	this->magic_mask[2] = 0xB2;
-	this->magic_mask[3] = 0xA1; // this is MSB !!
+	this->magic_mask[3] = 0xA1; 			// this is MSB !!
 	
-	this->magic_number_found = false; // when making instance no magic number is found yet..
-        this->f_in.open("/tmp/myfifo0", ios::in);// open file handle, direction in, reading fifo0, where tcpdump is dropping its data
-	this->f_out.open("/tmp/myfifo1", ios::out);// open file handle, direction out, writing to fifo1 where wireshark is going to read	
+	this->magic_number_found = false;    		// when no magic number is found yet..
+        this->f_in.open("/tmp/myfifo0",ios::in);	//open file handle, direction in, readingfifo0, 
+							//where tcpdump is dropping its data
+	this->f_out.open("/tmp/myfifo1",ios::out);	// open file handle, direction out, 
+							//writing to fifo1 where wireshark is going to read	
 	 	
 }
 
@@ -73,16 +73,17 @@ Parser::~Parser()
 
 void Parser::shift()
 {
-this->w = this->buf[0];
-for(int i = 0; i < 3; i++)
-	this->buf[i] = this->buf[i+1];
-this->buf[3] = this->r; // you must read before calling this function!!
+	this->w = this->buf[0];
+	for(int i = 0; i < 3; i++)
+		this->buf[i] = this->buf[i+1];
+
+	this->buf[3] = this->r; 			// you must read before calling this function!!
 }
 
 
 void Parser::check_for_magic_number()
 {
-// Dr. Logic is back,  checking for the magic_number
+// Checking for the magic_number
 if( (buf[0] ==  magic_mask[0]) && (buf[1] ==  magic_mask[1]) && (buf[2] ==  magic_mask[2]) && (buf[3] ==  magic_mask[3]) )
 	this-> magic_number_found = true;
 else
@@ -128,7 +129,7 @@ for(int i = 0; i < 4; i++)
 		}
 		else
 		{
-			;// do nothing
+			;	// do nothing
 		}
 	
 		

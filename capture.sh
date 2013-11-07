@@ -1,9 +1,15 @@
+
 #!/bin/bash
+
+
+# capture.sh
+#
 
 # Manuel Stephan and Ben Paras
 #
 # Used to monitor traffic on the beagelbone with wireshark 
 # execute as root cause tcpdump requires root rights
+
 #---------------------------------------------------------------
 
 #
@@ -11,9 +17,15 @@
 #
 # todo: pass parameter to the script to specify the interface you want to monitor on the bone 
 
+#-------------------------------------------------------------
+#!/bin/bash
+
+
+
 
 #..........begin function definition.........................
 # cleaning up at the end of the program
+
 set -e
 function cleanup {
   echo "cleaning up .... " 
@@ -27,9 +39,10 @@ function cleanup {
 
 
 #...........begin program ....................................
-trap cleanup INT # get a trap for the cleanup-function listen on INTerupts ! 
+# get a trap for the cleanup-function listen on INTerupts ! 
+trap cleanup INT 
 
-# check existance first ...  
+# check if parameters exists
 if [[ -z "$1" ]]; then
 	echo "Please specify a proper interface like eth0 or usb0!"
 	echo "You do this by ./capture.sh <interfacename>"
@@ -45,7 +58,7 @@ else
 fi
 
 
-# wireshark is prerequisite -> check if it is there
+# wireshark is required -> check if it is there
 if hash wireshark 2>/dev/null; then
         echo "wireshark is installed on your system."
     else
@@ -54,7 +67,7 @@ if hash wireshark 2>/dev/null; then
         exit 
 fi
 
-# The fifos are now set up and the other programs can be fired up, if old fifos exist i remove them cause they can contain crap
+# The FIFOs are now set up and the other programs can be fired up. If old FIFOs exist, remove them
 if [ -e /tmp/myfifo0 ];
 then
 	rm /tmp/myfifo0
@@ -79,9 +92,7 @@ else
 fi
 
 
-# Wireparser requires two fifos
-
-
+# Wireparser requires two FIFOs
 
 echo "Starting tcpdump ..."
 #using your local machine you can run: 
