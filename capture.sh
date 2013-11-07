@@ -1,9 +1,11 @@
+#!/bin/bash
+
 # Manuel Stephan and Ben Paras
 #
 # Used to monitor traffic on the beagelbone with wireshark 
 # execute as root cause tcpdump requires root rights
 #---------------------------------------------------------------
-#!/bin/bash
+
 #
 # 
 #
@@ -15,12 +17,10 @@
 set -e
 function cleanup {
   echo "cleaning up .... " 
- 
-  rm  -r /tmp/myfifo0
-  rm  -r /tmp/myfifo1
+  rm   /tmp/myfifo0
+  rm   /tmp/myfifo1
   # get rid of old fifos
-  kill `pidof wireparser`
-  #kill `pidof wireshark ` > /dev/null  # maybe not a good idea if you want to save captures ... 
+  
 }
 
 #...........end function definition...........................
