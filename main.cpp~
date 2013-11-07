@@ -7,9 +7,9 @@ by Manuel Stephan and Ben Paras
 
 int main()
 { 
-	Parser* p;
-	p = new Parser;
-	p->process_data();
-	delete p;
-	return 0;
+Parser* p;
+p = new Parser;
+p->process_data();
+delete p;
+return 0;
 }
