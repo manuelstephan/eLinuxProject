@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 
@@ -11,16 +10,6 @@
 # execute as root cause tcpdump requires root rights
 
 #---------------------------------------------------------------
-
-#
-# 
-#
-# todo: pass parameter to the script to specify the interface you want to monitor on the bone 
-
-#-------------------------------------------------------------
-#!/bin/bash
-
-
 
 
 #..........begin function definition.........................
