@@ -31,6 +31,8 @@ function cleanup {
   echo "cleaning up .... " 
   rm   /tmp/myfifo0
   rm   /tmp/myfifo1
+  ssh root@192.168.7.2 " kill `ssh root@192.168.7.2 "pidof 	  tcpdump"`"
+  kill `pidof wireshark`
   # get rid of old fifos
   
 }
